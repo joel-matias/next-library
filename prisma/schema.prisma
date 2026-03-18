@@ -13,48 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Book {
-  id            Int          @id @default(autoincrement())
-  title         String       @db.VarChar(200)
-  author        String       @db.VarChar(150)
-  isbn          String?      @unique @db.VarChar(20)
-  description   String?      @db.Text
-  publishedYear Int?
-  categoryId    Int
-  subcategoryId Int?
-  category      Category     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-
-  @@index([categoryId])
-  @@index([subcategoryId])
-  @@map("books")
-}
-
 model Category {
-  id            Int           @id @default(autoincrement())
-  name          String        @unique @db.VarChar(100)
-  description   String?       @db.Text
-  books         Book[]
-  subcategories Subcategory[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  books       Book[]
 
   @@map("categories")
 }
 
-model Subcategory {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(100)
-  description String?   @db.Text
-  categoryId  Int
-  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  books       Book[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+model Book {
+  id         Int      @id @default(autoincrement())
+  title      String
+  author     String
+  isbn       String?
+  year       Int?
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
 
-  @@unique([categoryId, name])
-  @@index([categoryId])
-  @@map("subcategories")
+  @@map("books")
 }
