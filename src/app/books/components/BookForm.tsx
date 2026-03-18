@@ -32,7 +32,7 @@ export default function BookForm({ categories, initialBook }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-cardrounded-xl border border-border p-6 max-w-lg">
+        <form onSubmit={handleSubmit} className="bg-card rounded-xl border border-border p-6 max-w-lg">
             {initialBook && (
                 <input type="hidden" name="id" value={initialBook.id} />
             )}
@@ -130,7 +130,7 @@ export default function BookForm({ categories, initialBook }: Props) {
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="bg-slate-400 hover:bg-slate-500 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
+                    className="bg-slate-500 hover:bg-slate-400 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
                 >
                     Cancelar
                 </button>

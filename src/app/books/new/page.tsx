@@ -8,7 +8,7 @@ export default async function NewBookPage() {
     });
 
     return (
-        <div className="min-h-screen bg-background p-8 flex text-center items-center aling-center">
+        <div className="min-h-screen bg-background p-8 flex items-center aling-center">
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8">
                     <Link href="/books" className="text-foreground hover:text-muted text-sm mb-1 inline-block transition-colors">

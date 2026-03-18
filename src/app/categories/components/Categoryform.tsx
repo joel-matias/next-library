@@ -31,7 +31,7 @@ export default function CategoryForm({ initialCategory }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-slate-800 rounded-xl border border-slate-700 p-6 max-w-lg">
+        <form onSubmit={handleSubmit} className="bg-card rounded-xl border border-border p-6 max-w-lg">
             {initialCategory && (
                 <input type="hidden" name="id" value={initialCategory.id} />
             )}
@@ -69,14 +69,14 @@ export default function CategoryForm({ initialCategory }: Props) {
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-surface hover:bg-surface-2 text-white px-5 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isPending ? "Guardando..." : initialCategory ? "Actualizar" : "Crear Categoría"}
                 </button>
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
+                    className="bg-slate-500 hover:bg-slate-400 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
                 >
                     Cancelar
                 </button>
