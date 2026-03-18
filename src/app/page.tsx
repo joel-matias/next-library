@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background flex flex-col items-center justify-center p-8">
       <div className="max-w-md w-full">
-        <h1 className="text-4xl font-bold text-foreground text-center mb-2">
+        <h1 className="text-4xl font-bold text-accent text-center mb-2">
           Biblioteca
         </h1>
         <p className="text-muted text-center mb-10">

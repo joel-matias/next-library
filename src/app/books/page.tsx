@@ -16,25 +16,25 @@ export default async function BooksPage() {
     );
 
     return (
-        <div className="min-h-screen bg-slate-900 p-8">
+        <div className="min-h-screen bg-background p-8">
             <div className="max-w-5xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
-                        <Link href="/" className="text-slate-500 hover:text-white text-sm mb-1 inline-block transition-colors">
+                        <Link href="/" className="text-muted hover:text-border text-sm mb-1 inline-block transition-colors">
                             ← Volver
                         </Link>
-                        <h1 className="text-3xl font-bold text-white">Libros</h1>
+                        <h1 className="text-3xl font-bold text-accent">Libros</h1>
                     </div>
                     <Link
                         href="/books/new"
-                        className="bg-blue-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                        className="bg-surface hover:bg-surface-2 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                     >
                         Nuevo Libro
                     </Link>
                 </div>
 
                 {books.length === 0 ? (
-                    <div className="text-center py-16 text-slate-500">
+                    <div className="text-center py-16 text-foregraund">
                         <p className="text-lg">No hay libros registrados.</p>
                         <p className="text-sm mt-1">Agrega el primer libro para comenzar.</p>
                     </div>
