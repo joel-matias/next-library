@@ -8,13 +8,13 @@ export default async function NewBookPage() {
     });
 
     return (
-        <div className="min-h-screen bg-slate-900 p-8">
+        <div className="min-h-screen bg-background p-8 flex text-center items-center aling-center">
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8">
-                    <Link href="/books" className="text-slate-400 hover:text-white text-sm mb-1 inline-block transition-colors">
+                    <Link href="/books" className="text-foreground hover:text-muted text-sm mb-1 inline-block transition-colors">
                         ← Volver
                     </Link>
-                    <h1 className="text-3xl font-bold text-white">Nuevo Libro</h1>
+                    <h1 className="text-3xl font-bold text-accent">Nuevo Libro</h1>
                 </div>
 
                 <BookForm categories={categories} />
