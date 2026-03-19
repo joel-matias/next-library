@@ -1,22 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #f3f3f3;
-  --surface: #292c37;
-  --surface-2: #1d2028;
-  --card: #12141a;
-  --border: #3a3e4b;
-  --muted: #cccccc;
-  --primary: #9f111b;
-  --primary-hover: #b11623;
-  --primary-foreground: #fff4f5;
-  --accent: #b11623;
-  --accent-foreground: #fff4f5;
-  --success-hover: #2f7d4d;
-  --success: #295b43;
-  --warning: #c28b2c;
-  --danger: #d33a45;
+  /* Backgrounds */
+  --background: #0d1117;
+  --surface: #161c2e;
+  --surface-2: #101526;
+  --card: #121829;
+
+  /* Text */
+  --foreground: #e8e4d6;
+  --muted: #8690a8;
+
+  /* Borders */
+  --border: #222b40;
+
+  /* Primary — Amber Gold */
+  --primary: #c9a44e;
+  --primary-hover: #dab85f;
+  --primary-foreground: #0d1117;
+
+  /* Accent */
+  --accent: #c9a44e;
+  --accent-foreground: #0d1117;
+
+  /* Semantic */
+  --success: #1c4d35;
+  --success-hover: #2a6b4a;
+  --warning: #9e7220;
+  --danger: #7d1e1e;
+  --danger-hover: #9c2828;
+
+  /* Inputs */
+  --input-bg: #0a0f1e;
+  --input-border: #28334e;
+  --input-focus: #c9a44e;
+
+  /* Tags / Badges */
+  --tag-bg: #1a2255;
+  --tag-text: #a0aaff;
 }
 
 @theme inline {
@@ -36,8 +57,15 @@
   --color-success-hover: var(--success-hover);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
-  --font-sans: var(--font-geist-sans);
+  --color-danger-hover: var(--danger-hover);
+  --color-input-bg: var(--input-bg);
+  --color-input-border: var(--input-border);
+  --color-input-focus: var(--input-focus);
+  --color-tag-bg: var(--tag-bg);
+  --color-tag-text: var(--tag-text);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-lora);
 }
 
 * {
@@ -47,5 +75,36 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Selection */
+::selection {
+  background: rgba(201, 164, 78, 0.2);
+  color: var(--foreground);
 }

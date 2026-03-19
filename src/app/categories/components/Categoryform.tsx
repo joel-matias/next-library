@@ -37,8 +37,8 @@ export default function CategoryForm({ initialCategory }: Props) {
             )}
 
             <div className="mb-5">
-                <label htmlFor="name" className="block text-slate-300 text-sm font-medium mb-2">
-                    Nombre <span className="text-red-400">*</span>
+                <label htmlFor="name" className="block text-muted text-sm font-medium mb-2">
+                    Nombre <span className="text-danger">*</span>
                 </label>
                 <input
                     id="name"
@@ -46,13 +46,13 @@ export default function CategoryForm({ initialCategory }: Props) {
                     name="name"
                     defaultValue={initialCategory?.name}
                     required
-                    className="w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full bg-input-bg border border-input-border text-foreground rounded-lg px-4 py-2.5 focus:outline-none focus:border-input-focus transition-colors"
                     placeholder="Ej: Ciencia Ficción"
                 />
             </div>
 
             <div className="mb-6">
-                <label htmlFor="description" className="block text-slate-300 text-sm font-medium mb-2">
+                <label htmlFor="description" className="block text-muted text-sm font-medium mb-2">
                     Descripción
                 </label>
                 <textarea
@@ -60,7 +60,7 @@ export default function CategoryForm({ initialCategory }: Props) {
                     name="description"
                     defaultValue={initialCategory?.description ?? ""}
                     rows={3}
-                    className="w-full bg-slate-900 border border-slate-600 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                    className="w-full bg-input-bg border border-input-border text-foreground rounded-lg px-4 py-2.5 focus:outline-none focus:border-input-focus transition-colors resize-none"
                     placeholder="Descripción opcional de la categoría"
                 />
             </div>
@@ -69,14 +69,14 @@ export default function CategoryForm({ initialCategory }: Props) {
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="bg-surface hover:bg-surface-2 text-white px-5 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-primary hover:bg-primary-hover text-primary-foreground px-5 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isPending ? "Guardando..." : initialCategory ? "Actualizar" : "Crear Categoría"}
                 </button>
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="bg-slate-500 hover:bg-slate-400 text-white px-5 py-2.5 rounded-lg font-medium transition-colors"
+                    className="bg-surface hover:bg-surface-2 text-muted border border-border px-5 py-2.5 rounded-lg font-medium transition-colors"
                 >
                     Cancelar
                 </button>
