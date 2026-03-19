@@ -17,7 +17,7 @@ interface Props {
 
 export default function BookTable({ books, categoryMap }: Props) {
     return (
-        <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
             <table className="w-full">
                 <thead>
                     <tr className="border-b border-slate-700">
@@ -52,7 +52,7 @@ export default function BookTable({ books, categoryMap }: Props) {
                                 <div className="flex gap-2 justify-end">
                                     <Link
                                         href={`/books/${book.id}/edit`}
-                                        className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-sm transition-colors"
+                                        className="bg-success hover:bg-success-hover text-white px-3 py-1.5 rounded-lg text-sm transition-colors"
                                     >
                                         Editar
                                     </Link>

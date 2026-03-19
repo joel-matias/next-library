@@ -13,7 +13,8 @@
   --primary-foreground: #fff4f5;
   --accent: #b11623;
   --accent-foreground: #fff4f5;
-  --success: #2f7d4d;
+  --success-hover: #2f7d4d;
+  --success: #295b43;
   --warning: #c28b2c;
   --danger: #d33a45;
 }
@@ -32,6 +33,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-success: var(--success);
+  --color-success-hover: var(--success-hover);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
