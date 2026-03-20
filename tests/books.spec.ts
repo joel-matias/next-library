@@ -30,13 +30,86 @@ const bookFlow = {
   finalIsbn: "9780307474728",
 };
 
-test.describe.serial("Demo paso por paso", () => {
-  test.beforeAll(async () => {
-    await prisma.book.deleteMany();
-    await prisma.category.deleteMany();
+async function resetDatabase() {
+  await prisma.book.deleteMany();
+  await prisma.category.deleteMany();
+}
+
+async function deleteDemoCategories() {
+  await prisma.book.deleteMany({
+    where: {
+      title: {
+        in: [bookFlow.firstTitle, bookFlow.updatedTitle, bookFlow.finalTitle],
+      },
+    },
   });
 
+  await prisma.category.deleteMany({
+    where: {
+      name: {
+        in: [
+          categoryFlow.firstName,
+          categoryFlow.updatedName,
+          categoryFlow.finalName,
+        ],
+      },
+    },
+  });
+}
+
+async function ensureCategory(name: string, description: string) {
+  await prisma.category.deleteMany({
+    where: {
+      name: {
+        in: [
+          categoryFlow.firstName,
+          categoryFlow.updatedName,
+          categoryFlow.finalName,
+        ].filter((value) => value !== name),
+      },
+    },
+  });
+
+  let category = await prisma.category.findFirst({ where: { name } });
+
+  if (!category) {
+    category = await prisma.category.create({
+      data: { name, description },
+    });
+  } else {
+    category = await prisma.category.update({
+      where: { id: category.id },
+      data: { description },
+    });
+  }
+
+  return category;
+}
+
+async function ensureBook(params: {
+  title: string;
+  author: string;
+  year: number;
+  isbn: string;
+  categoryId: number;
+}) {
+  await prisma.book.deleteMany({
+    where: {
+      title: {
+        in: [bookFlow.firstTitle, bookFlow.updatedTitle, bookFlow.finalTitle],
+      },
+    },
+  });
+
+  return prisma.book.create({
+    data: params,
+  });
+}
+
+test.describe.serial("Demo paso por paso", () => {
   test("paso 1: la base inicia vacia", async ({ page }) => {
+    await resetDatabase();
+
     await page.goto("/categories");
     await expect(page.getByText("Sin categorías registradas")).toBeVisible();
 
@@ -56,6 +129,8 @@ test.describe.serial("Demo paso por paso", () => {
   });
 
   test("paso 2: crear una categoria", async ({ page }) => {
+    await resetDatabase();
+
     await page.goto("/categories");
     await page.getByRole("link", { name: "+ Nueva Categoría" }).click();
 
@@ -81,6 +156,9 @@ test.describe.serial("Demo paso por paso", () => {
   test("paso 3: mostrar que la categoria aparece al crear un libro", async ({
     page,
   }) => {
+    await deleteDemoCategories();
+    await ensureCategory(categoryFlow.firstName, categoryFlow.firstDescription);
+
     await page.goto("/books/new");
 
     const categorySelect = page.getByLabel("Categoría *");
@@ -90,6 +168,9 @@ test.describe.serial("Demo paso por paso", () => {
   test("paso 4: editar la categoria y ver el cambio reflejado", async ({
     page,
   }) => {
+    await deleteDemoCategories();
+    await ensureCategory(categoryFlow.firstName, categoryFlow.firstDescription);
+
     await page.goto("/categories");
 
     const row = page.locator("tbody tr").filter({
@@ -122,6 +203,9 @@ test.describe.serial("Demo paso por paso", () => {
   });
 
   test("paso 5: eliminar la categoria editada", async ({ page }) => {
+    await deleteDemoCategories();
+    await ensureCategory(categoryFlow.updatedName, categoryFlow.updatedDescription);
+
     await page.goto("/categories");
 
     const row = page.locator("tbody tr").filter({
@@ -152,6 +236,8 @@ test.describe.serial("Demo paso por paso", () => {
   test("paso 6: crear la categoria final para asociarla a libros", async ({
     page,
   }) => {
+    await deleteDemoCategories();
+
     await page.goto("/categories/new");
 
     await page.getByLabel("Nombre *").fill(categoryFlow.finalName);
@@ -174,13 +260,19 @@ test.describe.serial("Demo paso por paso", () => {
   });
 
   test("paso 7: crear un libro usando la categoria final", async ({ page }) => {
+    await deleteDemoCategories();
+    const finalCategory = await ensureCategory(
+      categoryFlow.finalName,
+      categoryFlow.finalDescription
+    );
+
     await page.goto("/books/new");
 
     await page.getByLabel("Título *").fill(bookFlow.firstTitle);
     await page.getByLabel("Autor *").fill(bookFlow.firstAuthor);
     await page
       .getByLabel("Categoría *")
-      .selectOption({ label: categoryFlow.finalName });
+      .selectOption({ value: String(finalCategory.id) });
     await page.getByLabel("Año de publicación").fill(bookFlow.firstYear);
     await page.getByLabel("ISBN").fill(bookFlow.firstIsbn);
     await page.getByRole("button", { name: "Crear Libro" }).click();
@@ -206,11 +298,18 @@ test.describe.serial("Demo paso por paso", () => {
   test("paso 8: editar el libro y mantener su asociacion con la categoria", async ({
     page,
   }) => {
-    const finalCategory = await prisma.category.findFirst({
-      where: { name: categoryFlow.finalName },
+    await deleteDemoCategories();
+    const finalCategory = await ensureCategory(
+      categoryFlow.finalName,
+      categoryFlow.finalDescription
+    );
+    await ensureBook({
+      title: bookFlow.firstTitle,
+      author: bookFlow.firstAuthor,
+      year: Number(bookFlow.firstYear),
+      isbn: bookFlow.firstIsbn,
+      categoryId: finalCategory.id,
     });
-
-    expect(finalCategory).not.toBeNull();
 
     await page.goto("/books");
 
@@ -223,7 +322,7 @@ test.describe.serial("Demo paso por paso", () => {
     await page.getByLabel("Autor *").fill(bookFlow.updatedAuthor);
     await page
       .getByLabel("Categoría *")
-      .selectOption({ value: String(finalCategory!.id) });
+      .selectOption({ value: String(finalCategory.id) });
     await page.getByLabel("Año de publicación").fill(bookFlow.updatedYear);
     await page.getByLabel("ISBN").fill(bookFlow.updatedIsbn);
     await page.getByRole("button", { name: "Actualizar" }).click();
@@ -247,6 +346,19 @@ test.describe.serial("Demo paso por paso", () => {
   });
 
   test("paso 9: eliminar el libro editado", async ({ page }) => {
+    await deleteDemoCategories();
+    const finalCategory = await ensureCategory(
+      categoryFlow.finalName,
+      categoryFlow.finalDescription
+    );
+    await ensureBook({
+      title: bookFlow.updatedTitle,
+      author: bookFlow.updatedAuthor,
+      year: Number(bookFlow.updatedYear),
+      isbn: bookFlow.updatedIsbn,
+      categoryId: finalCategory.id,
+    });
+
     await page.goto("/books");
 
     const row = page.locator("tbody tr").filter({
@@ -275,11 +387,11 @@ test.describe.serial("Demo paso por paso", () => {
   });
 
   test("paso 10: crear el libro final y dejarlo guardado", async ({ page }) => {
-    const finalCategory = await prisma.category.findFirst({
-      where: { name: categoryFlow.finalName },
-    });
-
-    expect(finalCategory).not.toBeNull();
+    await deleteDemoCategories();
+    const finalCategory = await ensureCategory(
+      categoryFlow.finalName,
+      categoryFlow.finalDescription
+    );
 
     await page.goto("/books/new");
 
@@ -287,7 +399,7 @@ test.describe.serial("Demo paso por paso", () => {
     await page.getByLabel("Autor *").fill(bookFlow.finalAuthor);
     await page
       .getByLabel("Categoría *")
-      .selectOption({ value: String(finalCategory!.id) });
+      .selectOption({ value: String(finalCategory.id) });
     await page.getByLabel("Año de publicación").fill(bookFlow.finalYear);
     await page.getByLabel("ISBN").fill(bookFlow.finalIsbn);
     await page.getByRole("button", { name: "Crear Libro" }).click();
